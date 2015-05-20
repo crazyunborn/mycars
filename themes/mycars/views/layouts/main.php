@@ -16,6 +16,13 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css">
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+	<?php
+	if (Yii::app()->user->isGuest) {
+		echo '<style>
+				.span-5{display:none;}
+			  </style>';
+	}
+	?>
 </head>
 
 <body>

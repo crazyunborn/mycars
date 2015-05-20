@@ -1,7 +1,7 @@
 <?php
 /* @var $this SiteController */
 
-$this->pageTitle=Yii::app()->name . ' - О сайте';
+$this->pageTitle='О сайте - ' . Yii::app()->name;
 $this->breadcrumbs=array(
 	'О сайте',
 );
