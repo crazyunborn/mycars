@@ -114,11 +114,16 @@ class Catalog extends CActiveRecord
 
 	public static function selectShowenModels($brand){
         $atts = self::model()->findAllByAttributes(array('brand'=>$brand));
-        return CHtml::listData($atts, 'id', 'model');
+        return CHtml::listData($atts, 'model', 'model');
 	}
 
 	public static function selectShowenOptions($model){
         $atts = self::model()->findAllByAttributes(array('model'=>$model));
+        return CHtml::listData($atts, 'id', 'options');
+	}
+
+	public static function selectShowenCar($options){
+        $atts = self::model()->findAllByAttributes(array('options'=>$options));
         return CHtml::listData($atts, 'id', 'options');
 	}
 }

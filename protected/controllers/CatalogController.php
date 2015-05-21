@@ -28,7 +28,7 @@ class CatalogController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','getNeededModels'),
+				'actions'=>array('index','view','getNeededModels','getNeededOptions','getNeededCar'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -49,8 +49,9 @@ class CatalogController extends Controller
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
-	public function actionView($id)
+	public function actionView($id,$url1,$url2,$url3)
 	{
+		$this->createUrl('catalog/view',array('id'=>$id,'url1'=>$url1,'url2'=>$url2,'url3'=>$url3));
 		$this->render('view',array(
 			'model'=>$this->loadModel($id),
 		));
@@ -121,53 +122,50 @@ class CatalogController extends Controller
 	* Возврат моделей по марке
 	*/
 	public function actionGetNeededModels($brand){
-        $models = Catalog::selectShowenModels($brand);
+        if (empty($brand)){
+        	Yii::app()->end();
+        }
+        $dataProvider = Catalog::selectShowenModels($brand);
         if(Yii::app()->request->isAjaxRequest){
-            //$showenmodels = '<select>';
-            //foreach ($models as $model){
-            //	$showenmodels .= '<option>'.$model.'</option>';
-            //};
-            //$showenmodels .= '</select>';
-            //echo $showenmodels;
-
-            echo CHtml::dropDownList($model, 'model', $models, array(
-						'empty'=>Yii::t('default', 'Выберите модель'),
-					    'id' => 'model-input',
-					    'ajax' => array(        
-						                'type'=>'GET',
-						                'url'=>$this->createUrl('/catalog/getNeededOptions'),
-						                'update'=>'#options',
-						                'data'=>array(
-						                    'model'=> 'js:this.value',
-						                ),
-		                'success' => 'function(html){
-			                           jQuery("#options").html(html);
-			                       		}',
-                         
-						)
-					)
-            );
+			$this->renderPartial('_searchcarsmodel',array('dataProvider'=>$dataProvider),false,true);
             // Завершаем приложение
             Yii::app()->end();
-        }     
+        }
 	}
 
 	/**
 	* Возврат комплектаций в модели
 	*/
 	public function actionGetNeededOptions($model){
-        $options = Catalog::selectShowenOptions($model);
+        if (empty($model)){
+        	Yii::app()->end();
+        }
+        $dataProvider = Catalog::selectShowenOptions($model);
         if(Yii::app()->request->isAjaxRequest){
-            $showenoptions = '<select>';
-            foreach ($options as $option){
-            	$showenoptions .= '<option>'.$option.'</option>';
-            };
-            $showenoptions .= '</select>';
-            echo $showenoptions;
+			$this->renderPartial('_searchcarsoption',array('dataProvider'=>$dataProvider),false,true);
             // Завершаем приложение
             Yii::app()->end();
-        }     
+        }
 	}
+
+	/**
+	* Возврат комплектаций в модели
+	*/
+	public function actionGetNeededCar($id){
+        if (empty($id)){
+        	Yii::app()->end();
+        }
+        $dataProvider = Catalog::model()->findByAttributes(array('id'=>$id));
+        $dataProvider['brand'] = mb_strtolower(str_replace(" ","",$dataProvider['brand']));
+        $dataProvider['model'] = mb_strtolower(str_replace(" ","",$dataProvider['model']));
+        $dataProvider['options'] = mb_strtolower(str_replace(" ","",$dataProvider['options']));
+        if(Yii::app()->request->isAjaxRequest){
+			$this->renderPartial('_searchcar',array('dataProvider'=>$dataProvider),false,true);
+            // Завершаем приложение
+            Yii::app()->end();
+        }
+	}
+	
 
 	/**
 	 * Lists all models.

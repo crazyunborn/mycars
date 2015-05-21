@@ -2,6 +2,8 @@
 /* @var $this CatalogController */
 /* @var $model Catalog */
 
+$model->name = $model->brand.' '.$model->model.' '.$model->options;
+
 $this->breadcrumbs=array(
 	'Catalogs'=>array('index'),
 	$model->name,
@@ -21,7 +23,7 @@ $this->menu=array(
 </div>
 <div style="float:left;width:400px;">
 	<h1>
-		<?php echo $model->name; ?>
+		<?php echo $model->brand.' '.$model->model.' '.$model->options; ?>
 	</h1>
 	<?php echo $model->desc; ?>
 </div>

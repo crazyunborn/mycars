@@ -14,12 +14,11 @@ $this->menu=array(
 ?>
 
 <h1>Каталог автомобилей</h1>
-
-<p>Сдесь будет ajax выборка</p>
 <?php $this->renderPartial('_searchcars', array('model'=>$model)); ?>
-
-
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-)); ?>
+<div style="clear:both;"></div>
+<?php
+	//$this->widget('zii.widgets.CListView', array(
+	//'dataProvider'=>$dataProvider,
+	//'itemView'=>'_view',
+	//));
+?>
